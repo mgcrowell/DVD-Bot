@@ -1,10 +1,9 @@
 # discord-ifunny-downloader
 A small Python-based bot to download iFunny videos in a Discord server.
 
-Command:
+Commands:
 !fetch_video {video_url} – Downloads the video linked in the provided URL.
-
-Features:
+!ping - Sends back "Pong!"
 
 Utilizes dotenv for proper secrets management.
 Handles deprecated modules in Python 3.13 (replacing audioop and cgi with community-supported versions).

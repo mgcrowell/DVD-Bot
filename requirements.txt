@@ -7,6 +7,7 @@ audioop-lts==0.2.1
 beautifulsoup4==4.12.3
 chardet==4.0.0
 discord==2.3.2
+discord.py==2.4.0
 frozenlist==1.5.0
 idna==3.10
 legacy-cgi==2.6.1

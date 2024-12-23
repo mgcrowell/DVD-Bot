@@ -3,19 +3,17 @@ import aiohttp
 import pickle
 import instaloader
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-import discord
+import discord  # Make sure this is imported
 from discord.ext import commands
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 import time
-import tempfile
 
 # Load .env for secrets
 load_dotenv()
 botkey = os.getenv("BOT_KEY")
-insta_username = os.getenv("INSTA_USERNAME")
-insta_password = os.getenv("INSTA_PASSWORD")
 
 # Initialize bot
 intents = discord.Intents.default()
@@ -23,22 +21,13 @@ intents.messages = True  # Allows the bot to read messages
 intents.message_content = True  # Allows the bot to read the content of the message
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# Function to set up headless Chrome using Selenium
-def setup_chrome_driver():
-    options = Options()
-    options.add_argument("--headless")  # Run headlessly
-    options.add_argument("--disable-gpu")  # Disable GPU acceleration
-    options.add_argument("--no-sandbox")  # Run without sandboxing
-    options.add_argument("--disable-dev-shm-usage")  # Use /tmp for shared memory
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
-    
-    # Set path for chromedriver if necessary
-    driver = webdriver.Chrome(options=options)
-    return driver
-
 # Function to login to Instagram using Selenium
 def login_instagram(username, password):
-    driver = setup_chrome_driver()
+    # Set up headless Chrome
+    options = Options()
+    options.add_argument("--headless")  # Run headlessly
+    options.add_argument("--disable-gpu")
+    driver = webdriver.Chrome(options=options)
 
     try:
         # Open Instagram login page
@@ -46,8 +35,8 @@ def login_instagram(username, password):
         time.sleep(2)  # Wait for the page to load
 
         # Locate the login elements
-        username_input = driver.find_element_by_name("username")
-        password_input = driver.find_element_by_name("password")
+        username_input = driver.find_element(By.NAME, "username")
+        password_input = driver.find_element(By.NAME, "password")
         
         # Enter username and password
         username_input.send_keys(username)
@@ -102,8 +91,8 @@ async def fetch_video(ctx, webpage_url: str):
         
         # Check if the URL is from Instagram
         if "instagram.com/reel" in webpage_url:
-            username = insta_username
-            password = insta_password
+            username = "sema4_sync"
+            password = "N1ght$dreams"
             # Step 1: Login and save cookies
             login_instagram(username, password)
             # Step 2: Download the video using Instaloader with saved cookies
@@ -179,14 +168,13 @@ async def fetch_video(ctx, webpage_url: str):
                     print(f"Video downloaded successfully: {video_url}")
 
                     # Save video to a temporary file
-                    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmp_file:
-                        video_filename = tmp_file.name
-                        with open(video_filename, "wb") as file:
-                            while True:
-                                chunk = await video_response.content.read(8192)
-                                if not chunk:
-                                    break
-                                file.write(chunk)
+                    video_filename = "temp_video.mp4"
+                    with open(video_filename, "wb") as file:
+                        while True:
+                            chunk = await video_response.content.read(8192)
+                            if not chunk:
+                                break
+                            file.write(chunk)
 
             # Step 4: Reply with the video attached
             await ctx.send(file=discord.File(video_filename))

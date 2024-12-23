@@ -27,6 +27,7 @@ def login_instagram(username, password):
     options = Options()
     options.add_argument("--headless")  # Run headlessly
     options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")  # Disable sandboxing
     driver = webdriver.Chrome(options=options)
 
     try:
@@ -138,7 +139,6 @@ async def fetch_video(ctx, webpage_url: str):
             video_tag = soup.find('video')
 
             if not video_tag:
-                await ctx.send("No video tag found on the page.")
                 print(f"No video tag found on {webpage_url}")
                 return
 

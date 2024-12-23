@@ -1,4 +1,4 @@
-# DVD - Discord Video Download
+# DVD - Discord Video Downloader
 A small Python-based bot to download iFunny videos and Instagram Reels in a Discord server.
 
 Commands:

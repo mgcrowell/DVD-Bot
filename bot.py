@@ -14,6 +14,8 @@ import time
 # Load .env for secrets
 load_dotenv()
 botkey = os.getenv("BOT_KEY")
+insta_username = os.getenv("INSTA_USERNAME")
+insta_password = os.getenv("INSTA_PASSWORD")
 
 # Initialize bot
 intents = discord.Intents.default()
@@ -91,8 +93,8 @@ async def fetch_video(ctx, webpage_url: str):
         
         # Check if the URL is from Instagram
         if "instagram.com/reel" in webpage_url:
-            username = "sema4_sync"
-            password = "N1ght$dreams"
+            username = insta_username
+            password = insta_password
             # Step 1: Login and save cookies
             login_instagram(username, password)
             # Step 2: Download the video using Instaloader with saved cookies
